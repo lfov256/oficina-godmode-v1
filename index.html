@@ -1,831 +1,555 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oficina GodMode v1 • Online</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap');
-        
-        :root {
-            --bg: #1a1a2e;
-            --accent: #6c5ce7;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background: #0f0f1a;
-            color: #e0e0ff;
-            font-family: 'Inter', system_ui, sans-serif;
-            overflow: hidden;
-        }
-        
-        .container {
-            display: flex;
-            height: 100vh;
-            flex-direction: column;
-        }
-        
-        header {
-            background: #16213e;
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid #6c5ce7;
-        }
-        
-        .title {
-            font-size: 26px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .title span {
-            color: #6c5ce7;
-        }
-        
-        .stats-bar {
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-        }
-        
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .main {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-        
-        #game-canvas {
-            flex: 1;
-            background: #1f2a44;
-            border-right: 3px solid #6c5ce7;
-            cursor: crosshair;
-        }
-        
-        .sidebar {
-            width: 320px;
-            background: #16213e;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
-        }
-        
-        .panel {
-            background: #0f0f1a;
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid #6c5ce7;
-        }
-        
-        .panel h3 {
-            margin: 0 0 12px 0;
-            color: #a5b4fc;
-            font-size: 15px;
-        }
-        
-        .agent-info {
-            text-align: center;
-        }
-        
-        .agent-name {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 4px 0;
-        }
-        
-        .agent-role {
-            color: #94a3b8;
-            font-size: 13px;
-        }
-        
-        .bars {
-            margin: 16px 0;
-        }
-        
-        .bar {
-            height: 10px;
-            background: #334155;
-            border-radius: 9999px;
-            margin: 8px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .bar-fill {
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-        
-        .energy { background: #22c55e; }
-        .happiness { background: #eab308; }
-        .productivity { background: #3b82f6; }
-        
-        .buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .god-btn {
-            background: #6c5ce7;
-            color: white;
-            border: none;
-            padding: 10px 8px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .god-btn:hover {
-            background: #5b4cd4;
-            transform: translateY(-1px);
-        }
-        
-        .god-btn.chaos {
-            background: #ef4444;
-        }
-        
-        .log {
-            flex: 1;
-            background: #0f0f1a;
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 12.5px;
-            line-height: 1.4;
-            overflow-y: auto;
-            border: 1px solid #334155;
-        }
-        
-        .log-entry {
-            margin-bottom: 6px;
-            padding-left: 4px;
-            border-left: 3px solid #6c5ce7;
-        }
-        
-        .log-entry.god {
-            border-color: #a78bfa;
-            color: #c4b5fd;
-        }
-        
-        .controls {
-            display: flex;
-            gap: 8px;
-            margin-top: auto;
-        }
-        
-        .control-btn {
-            flex: 1;
-            padding: 8px;
-            background: #334155;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        
-        .zone-label {
-            position: absolute;
-            color: #64748b;
-            font-size: 11px;
-            font-weight: 600;
-            pointer-events: none;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 8px;
-            font-size: 11px;
-            color: #64748b;
-            background: #16213e;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oficina GodMode • v2</title>
+<style>
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8f9fc;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-border-tertiary: #e5e7eb;
+  --font-sans: Inter, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #f1f5f9;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1e2937;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+}
+
+.office-panel {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  height: 620px;
+}
+
+.office-canvas {
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.zone {
+  position: absolute;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.agent {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.agent:hover {
+  transform: scale(1.05);
+}
+
+.agent.selected {
+  box-shadow: 0 0 0 3px #6366f1;
+}
+
+.agent-label {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  white-space: nowrap;
+  color: #475569;
+  font-weight: 500;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.card h3 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.agent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.agent-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.agent-row:hover {
+  background: #f8fafc;
+}
+
+.agent-row.selected {
+  background: #eef2ff;
+}
+
+.agent-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.stats {
+  flex: 1;
+}
+
+.stat-bar {
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 9999px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.god-panel {
+  background: #f8fafc;
+  border: 1px solid #6366f1;
+}
+
+.god-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.god-btn {
+  padding: 9px 12px;
+  border: 0.5px solid #6366f1;
+  background: white;
+  color: #4338ca;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.god-btn:hover {
+  background: #6366f1;
+  color: white;
+}
+
+.god-btn.chaos {
+  border-color: #ef4444;
+  color: #b91c1c;
+}
+
+.god-btn.chaos:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.log {
+  font-size: 12px;
+  line-height: 1.45;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  padding: 4px 0;
+  border-bottom: 0.5px solid #f1f5f9;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.control-btn {
+  flex: 1;
+  padding: 8px;
+  background: white;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.control-btn.active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="title">
-                🏢 <span>OFICINA GODMODE</span> v1
-            </div>
-            <div class="stats-bar">
-                <div class="stat">
-                    <span>📈</span> 
-                    <strong id="global-prod">62</strong>% Productividad
-                </div>
-                <div class="stat">
-                    <span>👥</span> 
-                    <strong>5</strong> Agentes vivos
-                </div>
-            </div>
-        </header>
+<div class="container">
+  <div class="header">
+    <div>
+      <div class="title">Oficina GodMode</div>
+      <div class="subtitle">v2 • Simulación autónoma con intervención divina</div>
+    </div>
+    <div style="text-align: right; font-size: 13px; color: #64748b;">
+      Productividad global: <strong id="global-prod" style="color: #1e2937;">68%</strong><br>
+      <span style="font-size: 11px;">5 agentes • Tiempo: x<span id="speed">1</span></span>
+    </div>
+  </div>
 
-        <div class="main">
-            <!-- Canvas -->
-            <canvas id="game-canvas" width="900" height="620"></canvas>
-            
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Selected Agent -->
-                <div class="panel" id="agent-panel" style="display: none;">
-                    <div class="agent-info">
-                        <div id="agent-name" class="agent-name"></div>
-                        <div id="agent-role" class="agent-role"></div>
-                        
-                        <div class="bars">
-                            <div>
-                                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
-                                    <span>⚡ Energía</span>
-                                    <span id="energy-val">75</span>%
-                                </div>
-                                <div class="bar"><div id="energy-bar" class="bar-fill energy" style="width:75%"></div></div>
-                            </div>
-                            <div>
-                                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
-                                    <span>😊 Felicidad</span>
-                                    <span id="happiness-val">68</span>%
-                                </div>
-                                <div class="bar"><div id="happiness-bar" class="bar-fill happiness" style="width:68%"></div></div>
-                            </div>
-                            <div>
-                                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:2px;">
-                                    <span>📈 Productividad</span>
-                                    <span id="prod-val">61</span>%
-                                </div>
-                                <div class="bar"><div id="prod-bar" class="bar-fill productivity" style="width:61%"></div></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="buttons">
-                        <button onclick="godAction('energy')" class="god-btn">☕ Dar Energía</button>
-                        <button onclick="godAction('happiness')" class="god-btn">📈 Motivación</button>
-                        <button onclick="godAction('deadline')" class="god-btn">🚀 Deadline</button>
-                        <button onclick="godAction('chaos')" class="god-btn chaos">🔥 Provocar Caos</button>
-                        <button onclick="godAction('meeting')" class="god-btn" style="grid-column: span 2;">👥 Forzar Reunión</button>
-                    </div>
-                </div>
-                
-                <div class="panel" style="display: none;" id="no-selection">
-                    <p style="text-align:center; color:#94a3b8; margin:0;">
-                        👆 Haz clic en un agente<br>
-                        para actuar como <strong>Dios</strong>
-                    </p>
-                </div>
-                
-                <!-- Event Log -->
-                <div class="panel" style="flex:1; display:flex; flex-direction:column;">
-                    <h3>📜 Registro Divino</h3>
-                    <div id="event-log" class="log"></div>
-                </div>
-                
-                <!-- Global Controls -->
-                <div class="controls">
-                    <button onclick="togglePause()" id="pause-btn" class="control-btn">⏸ Pausa</button>
-                    <button onclick="changeSpeed()" class="control-btn">⚡ x<span id="speed-val">1</span></button>
-                    <button onclick="triggerRandomEvent()" class="control-btn">✨ Evento</button>
-                </div>
-            </div>
+  <div class="main-grid">
+    <!-- Oficina -->
+    <div class="office-panel">
+      <div class="office-canvas" id="office">
+        <!-- Zonas -->
+        <div class="zone" style="left: 40px; top: 40px; width: 340px; height: 280px; background: #f1f5f9;">
+          Área de Trabajo
         </div>
-        
-        <div class="footer">
-            Tú eres Dios • Haz clic en los agentes para intervenir • v1 Web • Hecho con ❤️ para ti
+        <div class="zone" style="left: 420px; top: 40px; width: 260px; height: 220px; background: #fefce8;">
+          Zona de Descanso
         </div>
+        <div class="zone" style="left: 420px; top: 290px; width: 260px; height: 180px; background: #ede9fe;">
+          Sala de Reuniones
+        </div>
+      </div>
     </div>
 
-    <script>
-        const canvas = document.getElementById('game-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let agents = [];
-        let selectedAgent = null;
-        let paused = false;
-        let timeSpeed = 1;
-        let frame = 0;
-        let eventLog = [];
-        
-        const COFFEE_POS = { x: 180, y: 520 };
-        const MEETING_POS = { x: 720, y: 380 };
-        
-        class Agent {
-            constructor(name, role, x, y, color, deskX, deskY, personality) {
-                this.name = name;
-                this.role = role;
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.deskX = deskX;
-                this.deskY = deskY;
-                this.personality = personality;
-                this.energy = 78;
-                this.happiness = 65;
-                this.productivity = 58;
-                this.currentAction = "vagando";
-                this.targetX = deskX;
-                this.targetY = deskY;
-                this.actionCooldown = 0;
-                this.lastInteract = 0;
-            }
-            
-            update() {
-                if (this.actionCooldown > 0) {
-                    this.actionCooldown--;
-                    return;
-                }
-                
-                // Drain
-                this.energy = Math.max(22, this.energy - (Math.random() < 0.4 ? 0.8 : 0.3));
-                if (Math.random() < 0.25) {
-                    this.happiness = Math.max(18, this.happiness - 0.6);
-                }
-                
-                // Decide new target
-                const distToTarget = Math.hypot(this.x - this.targetX, this.y - this.targetY);
-                if (distToTarget < 14 || this.targetX === undefined) {
-                    this.decideAction();
-                }
-                
-                // Move
-                if (this.targetX !== undefined) {
-                    const dx = this.targetX - this.x;
-                    const dy = this.targetY - this.y;
-                    const dist = Math.hypot(dx, dy);
-                    if (dist > 4) {
-                        this.x += (dx / dist) * 2.2 * timeSpeed;
-                        this.y += (dy / dist) * 2.2 * timeSpeed;
-                    } else {
-                        this.x = this.targetX;
-                        this.y = this.targetY;
-                    }
-                }
-                
-                // Action effects
-                if (this.currentAction === "trabajando") {
-                    this.productivity = Math.min(100, this.productivity + 0.9);
-                    this.energy = Math.max(20, this.energy - 0.7);
-                } else if (this.currentAction === "cafe") {
-                    this.energy = Math.min(100, this.energy + 2.5);
-                    this.happiness = Math.min(100, this.happiness + 0.8);
-                } else if (this.currentAction === "charlando") {
-                    this.happiness = Math.min(100, this.happiness + 1.4);
-                }
-                
-                // Bounds
-                this.x = Math.max(90, Math.min(this.x, 870));
-                this.y = Math.max(95, Math.min(this.y, 580));
-            }
-            
-            decideAction() {
-                if (this.energy < 42) {
-                    this.currentAction = "cafe";
-                    this.targetX = COFFEE_POS.x + (Math.random() - 0.5) * 40;
-                    this.targetY = COFFEE_POS.y + (Math.random() - 0.5) * 40;
-                    return;
-                }
-                
-                if (this.happiness < 48 && this.personality.extroversion > 55) {
-                    // Find nearest
-                    let nearest = null;
-                    let minDist = Infinity;
-                    agents.forEach(other => {
-                        if (other !== this) {
-                            const d = Math.hypot(this.x - other.x, this.y - other.y);
-                            if (d < minDist && d > 30) {
-                                minDist = d;
-                                nearest = other;
-                            }
-                        }
-                    });
-                    if (nearest) {
-                        this.currentAction = "buscando_amigo";
-                        this.targetX = nearest.x + (Math.random() - 0.5) * 50;
-                        this.targetY = nearest.y + (Math.random() - 0.5) * 50;
-                        return;
-                    }
-                }
-                
-                if (Math.random() < this.personality.ambition / 115) {
-                    this.currentAction = "trabajando";
-                    this.targetX = this.deskX;
-                    this.targetY = this.deskY;
-                } else {
-                    this.currentAction = "vagando";
-                    this.targetX = 120 + Math.random() * 680;
-                    this.targetY = 130 + Math.random() * 380;
-                }
-            }
-            
-            interactWith(other) {
-                let msg = "";
-                if (Math.random() > 0.42) {
-                    const delta = 7 + Math.random() * 9;
-                    this.happiness = Math.min(100, this.happiness + delta);
-                    other.happiness = Math.min(100, other.happiness + delta - 2);
-                    const topics = ["el proyecto", "el café", "el jefe", "el fin de semana", "los bugs"];
-                    msg = `${this.name} y ${other.name} charlaron sobre ${topics[Math.floor(Math.random()*topics.length)]}. ¡Buen rollo!`;
-                } else {
-                    const delta = -6 + Math.random() * 5;
-                    this.happiness = Math.max(18, this.happiness + delta);
-                    other.happiness = Math.max(18, other.happiness + delta + 1);
-                    msg = `${this.name} y ${other.name} discutieron. Tensión en el aire...`;
-                }
-                addEvent(msg);
-                this.actionCooldown = 28;
-                other.actionCooldown = 28;
-                this.currentAction = "charlando";
-                other.currentAction = "charlando";
-            }
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Agentes -->
+      <div class="card">
+        <h3>Agentes</h3>
+        <div class="agent-list" id="agent-list"></div>
+      </div>
+
+      <!-- Intervención Divina -->
+      <div class="card god-panel">
+        <h3 style="color: #4338ca;">Intervención Divina</h3>
+        <div class="god-buttons">
+          <button onclick="godIntervene('energy')" class="god-btn">☕ Energía</button>
+          <button onclick="godIntervene('happiness')" class="god-btn">📈 Motivación</button>
+          <button onclick="godIntervene('deadline')" class="god-btn">🚀 Deadline</button>
+          <button onclick="godIntervene('chaos')" class="god-btn chaos">🔥 Caos</button>
+        </div>
+        <button onclick="godIntervene('meeting')" class="god-btn" style="width: 100%; margin-top: 8px;">👥 Forzar Reunión</button>
+      </div>
+
+      <!-- Registro -->
+      <div class="card">
+        <h3>Registro de eventos</h3>
+        <div class="log" id="log"></div>
+      </div>
+
+      <!-- Controles -->
+      <div class="controls">
+        <button onclick="togglePause()" id="pause-btn" class="control-btn">⏸ Pausa</button>
+        <button onclick="changeSpeed()" class="control-btn">⚡ Velocidad</button>
+        <button onclick="randomEvent()" class="control-btn">✨ Evento</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let agents = [
+  { id: 1, name: "Ana", role: "Desarrolladora", color: "#6366f1", x: 180, y: 160, energy: 82, happiness: 71, productivity: 78, action: "trabajando", personality: { extro: 42, ambition: 89 } },
+  { id: 2, name: "Carlos", role: "Diseñador", color: "#f59e0b", x: 320, y: 190, energy: 65, happiness: 84, productivity: 62, action: "vagando", personality: { extro: 81, ambition: 67 } },
+  { id: 3, name: "Laura", role: "Project Manager", color: "#ef4444", x: 480, y: 130, energy: 58, happiness: 54, productivity: 91, action: "trabajando", personality: { extro: 49, ambition: 94 } },
+  { id: 4, name: "Pedro", role: "Interno", color: "#22c55e", x: 220, y: 340, energy: 91, happiness: 88, productivity: 44, action: "cafe", personality: { extro: 76, ambition: 51 } },
+  { id: 5, name: "Sofía", role: "QA", color: "#8b5cf6", x: 510, y: 380, energy: 74, happiness: 63, productivity: 83, action: "charlando", personality: { extro: 31, ambition: 72 } }
+];
+
+let selectedId = null;
+let paused = false;
+let speed = 1;
+let logEntries = [];
+
+function addLog(text, isGod = false) {
+  logEntries.unshift({ text, isGod });
+  if (logEntries.length > 7) logEntries.pop();
+  renderLog();
+}
+
+function renderLog() {
+  const container = document.getElementById('log');
+  container.innerHTML = logEntries.map(entry => 
+    `<div class="log-entry" style="${entry.isGod ? 'color:#6366f1; font-weight:500;' : ''}">${entry.text}</div>`
+  ).join('');
+}
+
+function renderAgents() {
+  const office = document.getElementById('office');
+  office.querySelectorAll('.agent').forEach(el => el.remove());
+
+  agents.forEach(agent => {
+    const el = document.createElement('div');
+    el.className = `agent ${selectedId === agent.id ? 'selected' : ''}`;
+    el.style.left = `${agent.x}px`;
+    el.style.top = `${agent.y}px`;
+    el.style.background = agent.color;
+    el.innerHTML = `<span>${agent.name[0]}</span><div class="agent-label">${agent.name}</div>`;
+    el.onclick = () => selectAgent(agent.id);
+    office.appendChild(el);
+  });
+}
+
+function selectAgent(id) {
+  selectedId = id;
+  renderAgents();
+  renderAgentList();
+}
+
+function renderAgentList() {
+  const container = document.getElementById('agent-list');
+  container.innerHTML = '';
+
+  agents.forEach(agent => {
+    const isSelected = selectedId === agent.id;
+    const div = document.createElement('div');
+    div.className = `agent-row ${isSelected ? 'selected' : ''}`;
+    div.innerHTML = `
+      <div class="agent-avatar" style="background: ${agent.color}">${agent.name[0]}</div>
+      <div class="stats">
+        <div style="font-weight:600; font-size:13px;">${agent.name}</div>
+        <div style="font-size:11px; color:#64748b;">${agent.role} • ${agent.action}</div>
+        <div class="stat-bar"><div class="stat-fill" style="width: ${agent.energy}%; background:#22c55e"></div></div>
+        <div class="stat-bar"><div class="stat-fill" style="width: ${agent.happiness}%; background:#eab308"></div></div>
+      </div>
+      <div style="font-size:11px; text-align:right; min-width:42px;">
+        <div>${Math.round(agent.productivity)}%</div>
+      </div>
+    `;
+    div.onclick = () => selectAgent(agent.id);
+    container.appendChild(div);
+  });
+}
+
+function updateGlobalStats() {
+  const avg = Math.round(agents.reduce((sum, a) => sum + a.productivity, 0) / agents.length);
+  document.getElementById('global-prod').textContent = avg + '%';
+  document.getElementById('speed').textContent = speed;
+}
+
+function godIntervene(action) {
+  if (!selectedId) {
+    addLog("Selecciona un agente primero", true);
+    return;
+  }
+
+  const agent = agents.find(a => a.id === selectedId);
+  if (!agent) return;
+
+  if (action === 'energy') {
+    agent.energy = Math.min(100, agent.energy + 24);
+    addLog(`DIOS: ${agent.name} recibió energía (+24)`, true);
+  } else if (action === 'happiness') {
+    agent.happiness = Math.min(100, agent.happiness + 19);
+    addLog(`DIOS: ${agent.name} fue motivado (+19)`, true);
+  } else if (action === 'deadline') {
+    agent.productivity = Math.min(100, agent.productivity + 15);
+    agent.energy = Math.max(20, agent.energy - 14);
+    agent.happiness = Math.max(20, agent.happiness - 10);
+    addLog(`DIOS: Deadline impuesto a ${agent.name}`, true);
+  } else if (action === 'chaos') {
+    agent.energy = Math.max(18, agent.energy - 30);
+    agent.happiness = Math.max(18, agent.happiness - 25);
+    addLog(`DIOS: Caos provocado en ${agent.name}`, true);
+  } else if (action === 'meeting') {
+    const other = agents.find(a => a.id !== selectedId);
+    if (other) {
+      const happy = Math.random() > 0.4 ? 12 : -5;
+      agent.happiness = Math.max(20, Math.min(100, agent.happiness + happy));
+      other.happiness = Math.max(20, Math.min(100, other.happiness + happy - 2));
+      addLog(`DIOS: Reunión forzada entre ${agent.name} y ${other.name}`, true);
+    }
+  }
+
+  renderAgents();
+  renderAgentList();
+  updateGlobalStats();
+}
+
+function togglePause() {
+  paused = !paused;
+  const btn = document.getElementById('pause-btn');
+  btn.textContent = paused ? '▶ Reanudar' : '⏸ Pausa';
+  btn.classList.toggle('active', paused);
+  if (!paused) addLog("Simulación reanudada", true);
+}
+
+function changeSpeed() {
+  speed = speed === 1 ? 3 : 1;
+  document.getElementById('speed').textContent = speed;
+  addLog(`Velocidad: x${speed}`, true);
+}
+
+function randomEvent() {
+  const events = [
+    () => { agents.forEach(a => a.energy = Math.min(100, a.energy + 10)); addLog("☕ Break de café colectivo"); },
+    () => { const v = agents[Math.floor(Math.random()*agents.length)]; v.happiness = Math.max(20, v.happiness - 15); addLog(`😡 El jefe regañó a ${v.name}`); },
+    () => { agents.forEach(a => a.happiness = Math.min(100, a.happiness + 8)); addLog("🎉 Buenas noticias del cliente"); },
+    () => { const v = agents[Math.floor(Math.random()*agents.length)]; v.productivity = Math.max(25, v.productivity - 12); addLog("💥 Servidor caído"); }
+  ];
+  events[Math.floor(Math.random()*events.length)]();
+  renderAgents();
+  renderAgentList();
+  updateGlobalStats();
+}
+
+function simulateStep() {
+  if (paused) return;
+
+  agents.forEach(agent => {
+    agent.energy = Math.max(22, agent.energy - (Math.random() * 0.7 + 0.3));
+    if (Math.random() < 0.22) agent.happiness = Math.max(20, agent.happiness - 0.5);
+
+    if (Math.random() < 0.08) {
+      if (agent.energy < 45) {
+        agent.x = 480 + Math.random() * 80;
+        agent.y = 140 + Math.random() * 60;
+        agent.action = "cafe";
+      } else if (agent.personality.extro > 60 && agent.happiness < 55) {
+        const target = agents.find(a => a.id !== agent.id);
+        if (target) {
+          agent.x = target.x + (Math.random() - 0.5) * 60;
+          agent.y = target.y + (Math.random() - 0.5) * 60;
+          agent.action = "charlando";
         }
-        
-        function initAgents() {
-            agents = [
-                new Agent("Ana", "Desarrolladora Senior", 260, 290, "#4682b4", 280, 265, 
-                          {extroversion: 45, ambition: 87, stress_resistance: 62}),
-                new Agent("Carlos", "Diseñador UX", 430, 315, "#ff8c00", 455, 295, 
-                          {extroversion: 82, ambition: 68, stress_resistance: 48}),
-                new Agent("Laura", "Project Manager", 590, 255, "#dc143c", 625, 235, 
-                          {extroversion: 52, ambition: 92, stress_resistance: 38}),
-                new Agent("Pedro", "Interno Dev", 320, 485, "#32cd32", 345, 465, 
-                          {extroversion: 78, ambition: 52, stress_resistance: 72}),
-                new Agent("Sofía", "QA Tester", 690, 485, "#9400d3", 725, 465, 
-                          {extroversion: 32, ambition: 73, stress_resistance: 78})
-            ];
-            
-            agents.forEach(a => {
-                a.targetX = a.deskX;
-                a.targetY = a.deskY;
-            });
-        }
-        
-        function addEvent(text, isGod = false) {
-            eventLog.unshift({ text, isGod, time: Date.now() });
-            if (eventLog.length > 9) eventLog.pop();
-            updateLog();
-        }
-        
-        function updateLog() {
-            const logEl = document.getElementById('event-log');
-            logEl.innerHTML = '';
-            eventLog.forEach(entry => {
-                const div = document.createElement('div');
-                div.className = `log-entry ${entry.isGod ? 'god' : ''}`;
-                div.textContent = entry.text;
-                logEl.appendChild(div);
-            });
-        }
-        
-        function updateUI() {
-            // Global productivity
-            const avg = Math.round(agents.reduce((sum, a) => sum + a.productivity, 0) / agents.length);
-            document.getElementById('global-prod').textContent = avg;
-            
-            // Selected agent panel
-            const panel = document.getElementById('agent-panel');
-            const noSel = document.getElementById('no-selection');
-            
-            if (selectedAgent) {
-                panel.style.display = 'block';
-                noSel.style.display = 'none';
-                
-                document.getElementById('agent-name').textContent = selectedAgent.name;
-                document.getElementById('agent-role').textContent = selectedAgent.role;
-                
-                document.getElementById('energy-val').textContent = Math.round(selectedAgent.energy);
-                document.getElementById('happiness-val').textContent = Math.round(selectedAgent.happiness);
-                document.getElementById('prod-val').textContent = Math.round(selectedAgent.productivity);
-                
-                document.getElementById('energy-bar').style.width = `${selectedAgent.energy}%`;
-                document.getElementById('happiness-bar').style.width = `${selectedAgent.happiness}%`;
-                document.getElementById('prod-bar').style.width = `${selectedAgent.productivity}%`;
-            } else {
-                panel.style.display = 'none';
-                noSel.style.display = 'block';
-            }
-        }
-        
-        function godAction(action) {
-            if (!selectedAgent) return;
-            
-            const agent = selectedAgent;
-            
-            if (action === 'energy') {
-                agent.energy = Math.min(100, agent.energy + 26);
-                addEvent(`✨ DIOS dio café a ${agent.name}. ¡Energía +26!`, true);
-            } else if (action === 'happiness') {
-                agent.happiness = Math.min(100, agent.happiness + 20);
-                addEvent(`✨ DIOS motivó a ${agent.name}. ¡Moral alta!`, true);
-            } else if (action === 'deadline') {
-                agent.productivity = Math.min(100, agent.productivity + 16);
-                agent.energy = Math.max(18, agent.energy - 16);
-                agent.happiness = Math.max(18, agent.happiness - 11);
-                addEvent(`⚡ DIOS impuso deadline a ${agent.name}. ¡Presión!`, true);
-            } else if (action === 'chaos') {
-                agent.energy = Math.max(18, agent.energy - 32);
-                agent.happiness = Math.max(18, agent.happiness - 26);
-                addEvent(`🔥 DIOS provocó caos en ${agent.name}. ¡Drama!`, true);
-            } else if (action === 'meeting') {
-                const others = agents.filter(a => a !== agent);
-                if (others.length > 0) {
-                    const partner = others[Math.floor(Math.random() * others.length)];
-                    agent.interactWith(partner);
-                    addEvent(`👥 DIOS forzó reunión entre ${agent.name} y ${partner.name}`, true);
-                }
-            }
-            
-            updateUI();
-        }
-        
-        function togglePause() {
-            paused = !paused;
-            const btn = document.getElementById('pause-btn');
-            btn.textContent = paused ? '▶ Reanudar' : '⏸ Pausa';
-            if (!paused) {
-                addEvent("▶ Simulación reanudada por Dios.", true);
-            }
-        }
-        
-        function changeSpeed() {
-            timeSpeed = timeSpeed === 1 ? 3 : 1;
-            document.getElementById('speed-val').textContent = timeSpeed;
-            addEvent(`⚡ Velocidad cambiada a x${timeSpeed}`, true);
-        }
-        
-        function triggerRandomEvent() {
-            const types = ['coffee', 'boss', 'news', 'server'];
-            const type = types[Math.floor(Math.random() * types.length)];
-            
-            if (type === 'coffee') {
-                agents.forEach(a => a.energy = Math.min(100, a.energy + 11));
-                addEvent("☕ ¡Todos reciben un break divino de café!", true);
-            } else if (type === 'boss') {
-                const victim = agents[Math.floor(Math.random() * agents.length)];
-                victim.happiness = Math.max(18, victim.happiness - 17);
-                victim.energy = Math.max(18, victim.energy - 9);
-                addEvent(`😡 El jefe regañó a ${victim.name}. ¡Tensión!`, true);
-            } else if (type === 'news') {
-                agents.forEach(a => a.happiness = Math.min(100, a.happiness + 9));
-                addEvent("🎉 ¡Buenas noticias del cliente! Moral alta.", true);
-            } else {
-                const victims = [...agents].sort(() => 0.5 - Math.random()).slice(0, 3);
-                victims.forEach(a => a.productivity = Math.max(22, a.productivity - 11));
-                addEvent("💥 ¡Servidor caído! Caos en la oficina.", true);
-            }
-        }
-        
-        function checkInteractions() {
-            for (let i = 0; i < agents.length; i++) {
-                for (let j = i + 1; j < agents.length; j++) {
-                    const a1 = agents[i];
-                    const a2 = agents[j];
-                    const dist = Math.hypot(a1.x - a2.x, a1.y - a2.y);
-                    
-                    if (dist > 28 && dist < 62 && 
-                        frame - a1.lastInteract > 85 && 
-                        frame - a2.lastInteract > 85) {
-                        
-                        if (Math.random() < 0.31) {
-                            a1.interactWith(a2);
-                            a1.lastInteract = frame;
-                            a2.lastInteract = frame;
-                        }
-                    }
-                }
-            }
-        }
-        
-        function drawOffice() {
-            // Background
-            ctx.fillStyle = '#1f2a44';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Work area
-            ctx.fillStyle = '#2a3a5c';
-            ctx.fillRect(70, 85, 470, 370);
-            ctx.strokeStyle = '#4682b4';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(70, 85, 470, 370);
-            ctx.fillStyle = '#64748b';
-            ctx.font = 'bold 13px Inter';
-            ctx.fillText("ÁREA DE TRABAJO", 200, 105);
-            
-            // Break area
-            ctx.fillStyle = '#3a2f1f';
-            ctx.fillRect(560, 85, 310, 290);
-            ctx.strokeStyle = '#f59e0b';
-            ctx.strokeRect(560, 85, 310, 290);
-            ctx.fillStyle = '#f59e0b';
-            ctx.fillText("ZONA DE DESCANSO + CAFÉ", 605, 105);
-            
-            // Meeting room
-            ctx.fillStyle = '#2f2a4a';
-            ctx.fillRect(560, 395, 310, 195);
-            ctx.strokeStyle = '#a78bfa';
-            ctx.strokeRect(560, 395, 310, 195);
-            ctx.fillStyle = '#a78bfa';
-            ctx.fillText("SALA DE REUNIONES", 605, 415);
-            
-            // Boss office
-            ctx.fillStyle = '#2a2a38';
-            ctx.fillRect(820, 70, 70, 110);
-            ctx.strokeStyle = '#64748b';
-            ctx.strokeRect(820, 70, 70, 110);
-            ctx.fillStyle = '#94a3b8';
-            ctx.fillText("JEFE", 838, 90);
-            
-            // Coffee machine
-            ctx.fillStyle = '#78350f';
-            ctx.beginPath();
-            ctx.arc(COFFEE_POS.x, COFFEE_POS.y, 18, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 14px Inter';
-            ctx.fillText("☕", COFFEE_POS.x - 7, COFFEE_POS.y + 5);
-            
-            // Meeting table
-            ctx.fillStyle = '#78350f';
-            ctx.fillRect(MEETING_POS.x - 55, MEETING_POS.y - 28, 110, 56);
-            ctx.fillStyle = '#451a03';
-            ctx.fillText("🪑 MESA", MEETING_POS.x - 30, MEETING_POS.y + 5);
-            
-            // Desks
-            ctx.strokeStyle = '#64748b';
-            ctx.lineWidth = 2;
-            agents.forEach(agent => {
-                ctx.fillStyle = '#475569';
-                ctx.fillRect(agent.deskX - 24, agent.deskY - 14, 48, 28);
-                ctx.strokeRect(agent.deskX - 24, agent.deskY - 14, 48, 28);
-                ctx.fillStyle = '#e0e7ff';
-                ctx.fillText("💻", agent.deskX - 8, agent.deskY + 4);
-            });
-        }
-        
-        function drawAgents() {
-            agents.forEach(agent => {
-                // Shadow
-                ctx.fillStyle = 'rgba(0,0,0,0.3)';
-                ctx.beginPath();
-                ctx.ellipse(agent.x + 4, agent.y + 6, 16, 8, 0, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Body
-                ctx.fillStyle = agent.color;
-                ctx.beginPath();
-                ctx.arc(agent.x, agent.y, 16, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Head
-                ctx.fillStyle = '#fcd34d';
-                ctx.beginPath();
-                ctx.arc(agent.x, agent.y - 5, 9, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Name
-                ctx.fillStyle = '#e0e7ff';
-                ctx.font = 'bold 12px Inter';
-                ctx.textAlign = 'center';
-                ctx.fillText(agent.name, agent.x, agent.y - 28);
-                
-                // Role
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '10px Inter';
-                ctx.fillText(agent.role.split(' ')[0], agent.x, agent.y - 40);
-                
-                // Action
-                ctx.fillStyle = '#64748b';
-                ctx.font = '9px Inter';
-                ctx.fillText(agent.currentAction, agent.x, agent.y + 32);
-                
-                // Bars
-                const barY = agent.y + 20;
-                // Energy
-                ctx.fillStyle = '#334155';
-                ctx.fillRect(agent.x - 16, barY, 32, 4);
-                ctx.fillStyle = '#22c55e';
-                ctx.fillRect(agent.x - 16, barY, 32 * (agent.energy / 100), 4);
-                
-                // Happiness
-                ctx.fillStyle = '#334155';
-                ctx.fillRect(agent.x - 16, barY + 6, 32, 4);
-                ctx.fillStyle = '#eab308';
-                ctx.fillRect(agent.x - 16, barY + 6, 32 * (agent.happiness / 100), 4);
-                
-                // Selection highlight
-                if (agent === selectedAgent) {
-                    ctx.strokeStyle = '#a78bfa';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(agent.x, agent.y, 22, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.lineWidth = 2;
-                }
-            });
-        }
-        
-        function gameLoop() {
-            if (!paused) {
-                frame++;
-                
-                // Update agents
-                agents.forEach(agent => agent.update());
-                
-                // Interactions
-                if (frame % 3 === 0) {
-                    checkInteractions();
-                }
-                
-                // Random events
-                if (Math.random() < 0.0045) {
-                    triggerRandomEvent();
-                }
-                
-                // Update global UI occasionally
-                if (frame % 12 === 0) {
-                    updateUI();
-                }
-            }
-            
-            // Draw
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawOffice();
-            drawAgents();
-            
-            requestAnimationFrame(gameLoop);
-        }
-        
-        function handleClick(e) {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            
-            let clicked = null;
-            agents.forEach(agent => {
-                const dist = Math.hypot(agent.x - mouseX, agent.y - mouseY);
-                if (dist < 20) {
-                    clicked = agent;
-                }
-            });
-            
-            if (clicked) {
-                selectedAgent = clicked;
-                addEvent(`Seleccionaste a ${clicked.name}`, true);
-            } else {
-                selectedAgent = null;
-            }
-            
-            updateUI();
-        }
-        
-        function init() {
-            initAgents();
-            
-            // Initial events
-            addEvent("¡Bienvenido a la Oficina GodMode Online!");
-            addEvent("Haz clic en cualquier agente para actuar como Dios.");
-            addEvent("Observa cómo viven su propia vida...");
-            
-            // Canvas click
-            canvas.addEventListener('click', handleClick);
-            
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (e.key === ' ') {
-                    e.preventDefault();
-                    togglePause();
-                }
-                if (e.key.toLowerCase() === 'r' && selectedAgent) {
-                    godAction('energy');
-                }
-            });
-            
-            // Start
-            updateUI();
-            gameLoop();
-            
-            // Welcome message
-            setTimeout(() => {
-                if (eventLog.length < 4) {
-                    addEvent("💡 Tip: Los extrovertidos buscan compañía solos.");
-                }
-            }, 8500);
-        }
-        
-        // Start everything
-        window.onload = init;
-    </script>
+      } else if (agent.personality.ambition > 75) {
+        agent.x = 120 + Math.random() * 200;
+        agent.y = 100 + Math.random() * 180;
+        agent.action = "trabajando";
+      } else {
+        agent.x = 150 + Math.random() * 500;
+        agent.y = 120 + Math.random() * 380;
+        agent.action = "vagando";
+      }
+    }
+
+    agent.x = Math.max(60, Math.min(agent.x, 640));
+    agent.y = Math.max(60, Math.min(agent.y, 520));
+  });
+
+  if (Math.random() < 0.09) {
+    const a1 = agents[Math.floor(Math.random() * agents.length)];
+    const a2 = agents.find(a => a.id !== a1.id);
+    if (a2 && Math.hypot(a1.x - a2.x, a1.y - a2.y) < 90) {
+      const happy = Math.random() > 0.45 ? 8 : -4;
+      a1.happiness = Math.max(20, Math.min(100, a1.happiness + happy));
+      a2.happiness = Math.max(20, Math.min(100, a2.happiness + happy - 1));
+      addLog(`${a1.name} y ${a2.name} charlaron`);
+    }
+  }
+
+  renderAgents();
+  renderAgentList();
+  updateGlobalStats();
+}
+
+function init() {
+  addLog("Bienvenido a Oficina GodMode v2");
+  addLog("Haz clic en un agente para intervenir como Dios");
+
+  renderAgents();
+  renderAgentList();
+  updateGlobalStats();
+
+  setInterval(() => {
+    if (!paused) simulateStep();
+  }, 420);
+
+  setInterval(() => {
+    if (!paused && Math.random() < 0.12) randomEvent();
+  }, 14000);
+
+  setTimeout(() => {
+    selectAgent(1);
+  }, 800);
+}
+
+window.onload = init;
+</script>
 </body>
 </html>
