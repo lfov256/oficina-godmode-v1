@@ -1,555 +1,947 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Oficina GodMode • v2</title>
-<style>
-:root {
-  --color-background-primary: #ffffff;
-  --color-background-secondary: #f8f9fc;
-  --color-text-primary: #1f2937;
-  --color-text-secondary: #6b7280;
-  --color-border-tertiary: #e5e7eb;
-  --font-sans: Inter, system-ui, sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background: #f1f5f9;
-  font-family: var(--font-sans);
-  color: var(--color-text-primary);
-  line-height: 1.5;
-}
-
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1e2937;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-}
-
-.main-grid {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 24px;
-}
-
-.office-panel {
-  background: var(--color-background-primary);
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: 12px;
-  padding: 20px;
-  position: relative;
-  height: 620px;
-}
-
-.office-canvas {
-  width: 100%;
-  height: 100%;
-  background: #f8fafc;
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-}
-
-.zone {
-  position: absolute;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 8px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #64748b;
-}
-
-.agent {
-  position: absolute;
-  width: 42px;
-  height: 42px;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 13px;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.1s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.agent:hover {
-  transform: scale(1.05);
-}
-
-.agent.selected {
-  box-shadow: 0 0 0 3px #6366f1;
-}
-
-.agent-label {
-  position: absolute;
-  top: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  white-space: nowrap;
-  color: #475569;
-  font-weight: 500;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.card {
-  background: var(--color-background-primary);
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.card h3 {
-  margin: 0 0 12px 0;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.agent-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.agent-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.1s;
-}
-
-.agent-row:hover {
-  background: #f8fafc;
-}
-
-.agent-row.selected {
-  background: #eef2ff;
-}
-
-.agent-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 13px;
-}
-
-.stats {
-  flex: 1;
-}
-
-.stat-bar {
-  height: 5px;
-  background: #e2e8f0;
-  border-radius: 9999px;
-  margin-top: 4px;
-  overflow: hidden;
-}
-
-.stat-fill {
-  height: 100%;
-  transition: width 0.3s ease;
-}
-
-.god-panel {
-  background: #f8fafc;
-  border: 1px solid #6366f1;
-}
-
-.god-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.god-btn {
-  padding: 9px 12px;
-  border: 0.5px solid #6366f1;
-  background: white;
-  color: #4338ca;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.1s;
-}
-
-.god-btn:hover {
-  background: #6366f1;
-  color: white;
-}
-
-.god-btn.chaos {
-  border-color: #ef4444;
-  color: #b91c1c;
-}
-
-.god-btn.chaos:hover {
-  background: #ef4444;
-  color: white;
-}
-
-.log {
-  font-size: 12px;
-  line-height: 1.45;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.log-entry {
-  padding: 4px 0;
-  border-bottom: 0.5px solid #f1f5f9;
-}
-
-.log-entry:last-child {
-  border-bottom: none;
-}
-
-.controls {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.control-btn {
-  flex: 1;
-  padding: 8px;
-  background: white;
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: 8px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.control-btn.active {
-  background: #6366f1;
-  color: white;
-  border-color: #6366f1;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oficina GodMode • v1.2 Mejorada</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #6366f1;
+        }
+        
+        * { box-sizing: border-box; }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a14;
+            color: #e0e7ff;
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow: hidden;
+        }
+        
+        .app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1e2937, #0f172a);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 28px;
+            font-size: 14px;
+        }
+        
+        .stat-pill {
+            background: #1e2937;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .game-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            padding: 20px;
+        }
+        
+        #game-canvas {
+            border: 4px solid #334155;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+            background: #1e2937;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .sidebar {
+            width: 340px;
+            background: #1e2937;
+            border-left: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .panel {
+            margin: 16px;
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid #475569;
+        }
+        
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .agent-card {
+            text-align: center;
+        }
+        
+        .agent-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 6px 0 2px;
+        }
+        
+        .agent-role {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 14px;
+        }
+        
+        .stat-row {
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: #cbd5e1;
+        }
+        
+        .progress {
+            height: 8px;
+            background: #334155;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .god-btn {
+            padding: 11px 8px;
+            border: none;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .god-btn.primary { background: #6366f1; color: white; }
+        .god-btn.primary:hover { background: #5558e0; transform: translateY(-1px); }
+        
+        .god-btn.danger { background: #ef4444; color: white; }
+        .god-btn.danger:hover { background: #dc2626; }
+        
+        .log-container {
+            flex: 1;
+            margin: 0 16px 16px;
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 14px;
+            border: 1px solid #475569;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .log {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 12.5px;
+            line-height: 1.45;
+            padding-right: 6px;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #334155;
+            color: #cbd5e1;
+        }
+        
+        .log-entry.god {
+            color: #c4b5fd;
+            font-weight: 500;
+        }
+        
+        .controls {
+            padding: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .ctrl-btn {
+            flex: 1;
+            padding: 10px;
+            background: #334155;
+            color: #e0e7ff;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .ctrl-btn:hover {
+            background: #475569;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.92);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #1e2937;
+            padding: 32px;
+            border-radius: 20px;
+            max-width: 420px;
+            text-align: center;
+            border: 1px solid #6366f1;
+        }
+        
+        .welcome-title {
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+        
+        .welcome-text {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        
+        .zone-label {
+            position: absolute;
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div>
-      <div class="title">Oficina GodMode</div>
-      <div class="subtitle">v2 • Simulación autónoma con intervención divina</div>
-    </div>
-    <div style="text-align: right; font-size: 13px; color: #64748b;">
-      Productividad global: <strong id="global-prod" style="color: #1e2937;">68%</strong><br>
-      <span style="font-size: 11px;">5 agentes • Tiempo: x<span id="speed">1</span></span>
-    </div>
-  </div>
-
-  <div class="main-grid">
-    <!-- Oficina -->
-    <div class="office-panel">
-      <div class="office-canvas" id="office">
-        <!-- Zonas -->
-        <div class="zone" style="left: 40px; top: 40px; width: 340px; height: 280px; background: #f1f5f9;">
-          Área de Trabajo
+    <div class="app">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                🏢 <span>OFICINA GODMODE</span>
+            </div>
+            
+            <div class="header-stats">
+                <div class="stat-pill">
+                    📈 <span id="global-prod">68</span>% Productividad
+                </div>
+                <div class="stat-pill">
+                    👥 <span>5</span> Agentes • <span id="time-speed">x1</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- Game Area -->
+            <div class="game-container">
+                <canvas id="game-canvas" width="920" height="640"></canvas>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Selected Agent -->
+                <div class="panel" id="agent-panel" style="display: none;">
+                    <div class="panel-title">🎯 AGENTE SELECCIONADO</div>
+                    
+                    <div class="agent-card">
+                        <div id="agent-name" class="agent-name"></div>
+                        <div id="agent-role" class="agent-role"></div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>⚡ Energía</span>
+                                <span id="energy-val">78</span>%
+                            </div>
+                            <div class="progress"><div id="energy-bar" class="progress-bar" style="width:78%; background:#22c55e"></div></div>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>😊 Felicidad</span>
+                                <span id="happiness-val">65</span>%
+                            </div>
+                            <div class="progress"><div id="happiness-bar" class="progress-bar" style="width:65%; background:#eab308"></div></div>
+                        </div>
+                        
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>📈 Productividad</span>
+                                <span id="prod-val">61</span>%
+                            </div>
+                            <div class="progress"><div id="prod-bar" class="progress-bar" style="width:61%; background:#3b82f6"></div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="btn-grid">
+                        <button onclick="godAction('energy')" class="god-btn primary">☕ Energía</button>
+                        <button onclick="godAction('happiness')" class="god-btn primary">📈 Motivación</button>
+                        <button onclick="godAction('deadline')" class="god-btn primary">🚀 Deadline</button>
+                        <button onclick="godAction('chaos')" class="god-btn danger">🔥 Caos</button>
+                        <button onclick="godAction('meeting')" class="god-btn primary" style="grid-column: span 2;">👥 Forzar Reunión</button>
+                    </div>
+                </div>
+                
+                <div class="panel" id="no-selection" style="text-align: center; padding: 30px 20px;">
+                    <div style="font-size: 42px; margin-bottom: 12px;">👆</div>
+                    <div style="font-weight: 600; margin-bottom: 6px;">Haz clic en un agente</div>
+                    <div style="color: #64748b; font-size: 13px;">para actuar como Dios</div>
+                </div>
+                
+                <!-- Event Log -->
+                <div class="log-container">
+                    <div class="panel-title">📜 REGISTRO DIVINO</div>
+                    <div id="event-log" class="log"></div>
+                </div>
+                
+                <!-- Controls -->
+                <div class="controls">
+                    <button onclick="togglePause()" id="pause-btn" class="ctrl-btn">⏸ Pausa</button>
+                    <button onclick="changeSpeed()" class="ctrl-btn">⚡ Velocidad</button>
+                    <button onclick="resetSimulation()" class="ctrl-btn">🔄 Reset</button>
+                </div>
+            </div>
         </div>
-        <div class="zone" style="left: 420px; top: 40px; width: 260px; height: 220px; background: #fefce8;">
-          Zona de Descanso
-        </div>
-        <div class="zone" style="left: 420px; top: 290px; width: 260px; height: 180px; background: #ede9fe;">
-          Sala de Reuniones
-        </div>
-      </div>
     </div>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Agentes -->
-      <div class="card">
-        <h3>Agentes</h3>
-        <div class="agent-list" id="agent-list"></div>
-      </div>
-
-      <!-- Intervención Divina -->
-      <div class="card god-panel">
-        <h3 style="color: #4338ca;">Intervención Divina</h3>
-        <div class="god-buttons">
-          <button onclick="godIntervene('energy')" class="god-btn">☕ Energía</button>
-          <button onclick="godIntervene('happiness')" class="god-btn">📈 Motivación</button>
-          <button onclick="godIntervene('deadline')" class="god-btn">🚀 Deadline</button>
-          <button onclick="godIntervene('chaos')" class="god-btn chaos">🔥 Caos</button>
+    
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal">
+        <div class="modal-content">
+            <div style="font-size: 48px; margin-bottom: 16px;">🏢</div>
+            <div class="welcome-title">Bienvenido a Oficina GodMode v1.2</div>
+            <div class="welcome-text">
+                Tú eres <strong>Dios</strong>.<br>
+                5 agentes viven su propia vida con personalidades únicas.<br>
+                Observa el caos... o intervén cuando quieras.
+            </div>
+            
+            <div style="text-align: left; background: #0f172a; padding: 16px; border-radius: 12px; margin-bottom: 20px; font-size: 13px;">
+                <strong>Controles:</strong><br>
+                • Clic en agente → Intervenir<br>
+                • Espacio → Pausa<br>
+                • R → Dar energía rápido<br>
+                • Los agentes deciden solos qué hacer
+            </div>
+            
+            <button onclick="closeModal()" style="background: #6366f1; color: white; border: none; padding: 12px 32px; border-radius: 9999px; font-weight: 600; cursor: pointer;">
+                ¡Empezar a jugar!
+            </button>
         </div>
-        <button onclick="godIntervene('meeting')" class="god-btn" style="width: 100%; margin-top: 8px;">👥 Forzar Reunión</button>
-      </div>
-
-      <!-- Registro -->
-      <div class="card">
-        <h3>Registro de eventos</h3>
-        <div class="log" id="log"></div>
-      </div>
-
-      <!-- Controles -->
-      <div class="controls">
-        <button onclick="togglePause()" id="pause-btn" class="control-btn">⏸ Pausa</button>
-        <button onclick="changeSpeed()" class="control-btn">⚡ Velocidad</button>
-        <button onclick="randomEvent()" class="control-btn">✨ Evento</button>
-      </div>
     </div>
-  </div>
-</div>
-
-<script>
-let agents = [
-  { id: 1, name: "Ana", role: "Desarrolladora", color: "#6366f1", x: 180, y: 160, energy: 82, happiness: 71, productivity: 78, action: "trabajando", personality: { extro: 42, ambition: 89 } },
-  { id: 2, name: "Carlos", role: "Diseñador", color: "#f59e0b", x: 320, y: 190, energy: 65, happiness: 84, productivity: 62, action: "vagando", personality: { extro: 81, ambition: 67 } },
-  { id: 3, name: "Laura", role: "Project Manager", color: "#ef4444", x: 480, y: 130, energy: 58, happiness: 54, productivity: 91, action: "trabajando", personality: { extro: 49, ambition: 94 } },
-  { id: 4, name: "Pedro", role: "Interno", color: "#22c55e", x: 220, y: 340, energy: 91, happiness: 88, productivity: 44, action: "cafe", personality: { extro: 76, ambition: 51 } },
-  { id: 5, name: "Sofía", role: "QA", color: "#8b5cf6", x: 510, y: 380, energy: 74, happiness: 63, productivity: 83, action: "charlando", personality: { extro: 31, ambition: 72 } }
-];
-
-let selectedId = null;
-let paused = false;
-let speed = 1;
-let logEntries = [];
-
-function addLog(text, isGod = false) {
-  logEntries.unshift({ text, isGod });
-  if (logEntries.length > 7) logEntries.pop();
-  renderLog();
-}
-
-function renderLog() {
-  const container = document.getElementById('log');
-  container.innerHTML = logEntries.map(entry => 
-    `<div class="log-entry" style="${entry.isGod ? 'color:#6366f1; font-weight:500;' : ''}">${entry.text}</div>`
-  ).join('');
-}
-
-function renderAgents() {
-  const office = document.getElementById('office');
-  office.querySelectorAll('.agent').forEach(el => el.remove());
-
-  agents.forEach(agent => {
-    const el = document.createElement('div');
-    el.className = `agent ${selectedId === agent.id ? 'selected' : ''}`;
-    el.style.left = `${agent.x}px`;
-    el.style.top = `${agent.y}px`;
-    el.style.background = agent.color;
-    el.innerHTML = `<span>${agent.name[0]}</span><div class="agent-label">${agent.name}</div>`;
-    el.onclick = () => selectAgent(agent.id);
-    office.appendChild(el);
-  });
-}
-
-function selectAgent(id) {
-  selectedId = id;
-  renderAgents();
-  renderAgentList();
-}
-
-function renderAgentList() {
-  const container = document.getElementById('agent-list');
-  container.innerHTML = '';
-
-  agents.forEach(agent => {
-    const isSelected = selectedId === agent.id;
-    const div = document.createElement('div');
-    div.className = `agent-row ${isSelected ? 'selected' : ''}`;
-    div.innerHTML = `
-      <div class="agent-avatar" style="background: ${agent.color}">${agent.name[0]}</div>
-      <div class="stats">
-        <div style="font-weight:600; font-size:13px;">${agent.name}</div>
-        <div style="font-size:11px; color:#64748b;">${agent.role} • ${agent.action}</div>
-        <div class="stat-bar"><div class="stat-fill" style="width: ${agent.energy}%; background:#22c55e"></div></div>
-        <div class="stat-bar"><div class="stat-fill" style="width: ${agent.happiness}%; background:#eab308"></div></div>
-      </div>
-      <div style="font-size:11px; text-align:right; min-width:42px;">
-        <div>${Math.round(agent.productivity)}%</div>
-      </div>
-    `;
-    div.onclick = () => selectAgent(agent.id);
-    container.appendChild(div);
-  });
-}
-
-function updateGlobalStats() {
-  const avg = Math.round(agents.reduce((sum, a) => sum + a.productivity, 0) / agents.length);
-  document.getElementById('global-prod').textContent = avg + '%';
-  document.getElementById('speed').textContent = speed;
-}
-
-function godIntervene(action) {
-  if (!selectedId) {
-    addLog("Selecciona un agente primero", true);
-    return;
-  }
-
-  const agent = agents.find(a => a.id === selectedId);
-  if (!agent) return;
-
-  if (action === 'energy') {
-    agent.energy = Math.min(100, agent.energy + 24);
-    addLog(`DIOS: ${agent.name} recibió energía (+24)`, true);
-  } else if (action === 'happiness') {
-    agent.happiness = Math.min(100, agent.happiness + 19);
-    addLog(`DIOS: ${agent.name} fue motivado (+19)`, true);
-  } else if (action === 'deadline') {
-    agent.productivity = Math.min(100, agent.productivity + 15);
-    agent.energy = Math.max(20, agent.energy - 14);
-    agent.happiness = Math.max(20, agent.happiness - 10);
-    addLog(`DIOS: Deadline impuesto a ${agent.name}`, true);
-  } else if (action === 'chaos') {
-    agent.energy = Math.max(18, agent.energy - 30);
-    agent.happiness = Math.max(18, agent.happiness - 25);
-    addLog(`DIOS: Caos provocado en ${agent.name}`, true);
-  } else if (action === 'meeting') {
-    const other = agents.find(a => a.id !== selectedId);
-    if (other) {
-      const happy = Math.random() > 0.4 ? 12 : -5;
-      agent.happiness = Math.max(20, Math.min(100, agent.happiness + happy));
-      other.happiness = Math.max(20, Math.min(100, other.happiness + happy - 2));
-      addLog(`DIOS: Reunión forzada entre ${agent.name} y ${other.name}`, true);
-    }
-  }
-
-  renderAgents();
-  renderAgentList();
-  updateGlobalStats();
-}
-
-function togglePause() {
-  paused = !paused;
-  const btn = document.getElementById('pause-btn');
-  btn.textContent = paused ? '▶ Reanudar' : '⏸ Pausa';
-  btn.classList.toggle('active', paused);
-  if (!paused) addLog("Simulación reanudada", true);
-}
-
-function changeSpeed() {
-  speed = speed === 1 ? 3 : 1;
-  document.getElementById('speed').textContent = speed;
-  addLog(`Velocidad: x${speed}`, true);
-}
-
-function randomEvent() {
-  const events = [
-    () => { agents.forEach(a => a.energy = Math.min(100, a.energy + 10)); addLog("☕ Break de café colectivo"); },
-    () => { const v = agents[Math.floor(Math.random()*agents.length)]; v.happiness = Math.max(20, v.happiness - 15); addLog(`😡 El jefe regañó a ${v.name}`); },
-    () => { agents.forEach(a => a.happiness = Math.min(100, a.happiness + 8)); addLog("🎉 Buenas noticias del cliente"); },
-    () => { const v = agents[Math.floor(Math.random()*agents.length)]; v.productivity = Math.max(25, v.productivity - 12); addLog("💥 Servidor caído"); }
-  ];
-  events[Math.floor(Math.random()*events.length)]();
-  renderAgents();
-  renderAgentList();
-  updateGlobalStats();
-}
-
-function simulateStep() {
-  if (paused) return;
-
-  agents.forEach(agent => {
-    agent.energy = Math.max(22, agent.energy - (Math.random() * 0.7 + 0.3));
-    if (Math.random() < 0.22) agent.happiness = Math.max(20, agent.happiness - 0.5);
-
-    if (Math.random() < 0.08) {
-      if (agent.energy < 45) {
-        agent.x = 480 + Math.random() * 80;
-        agent.y = 140 + Math.random() * 60;
-        agent.action = "cafe";
-      } else if (agent.personality.extro > 60 && agent.happiness < 55) {
-        const target = agents.find(a => a.id !== agent.id);
-        if (target) {
-          agent.x = target.x + (Math.random() - 0.5) * 60;
-          agent.y = target.y + (Math.random() - 0.5) * 60;
-          agent.action = "charlando";
+    
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d', { alpha: true });
+        
+        let agents = [];
+        let selectedAgent = null;
+        let paused = false;
+        let timeSpeed = 1;
+        let frame = 0;
+        let eventLog = [];
+        
+        const COFFEE = { x: 185, y: 505 };
+        const MEETING = { x: 715, y: 375 };
+        
+        class Agent {
+            constructor(name, role, x, y, color, deskX, deskY, personality) {
+                this.name = name;
+                this.role = role;
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.deskX = deskX;
+                this.deskY = deskY;
+                this.personality = personality;
+                this.energy = 76 + Math.random() * 12;
+                this.happiness = 62 + Math.random() * 14;
+                this.productivity = 55 + Math.random() * 12;
+                this.currentAction = "vagando";
+                this.targetX = deskX;
+                this.targetY = deskY;
+                this.vx = 0;
+                this.vy = 0;
+                this.actionCooldown = 40;
+                this.lastInteract = 0;
+                this.thought = "";
+                this.thoughtTimer = 0;
+            }
+            
+            update() {
+                if (this.actionCooldown > 0) this.actionCooldown--;
+                
+                this.energy = Math.max(20, this.energy - (0.35 + Math.random() * 0.4));
+                if (Math.random() < 0.22) this.happiness = Math.max(18, this.happiness - 0.5);
+                
+                const dist = Math.hypot(this.x - this.targetX, this.y - this.targetY);
+                if (dist < 12 || this.actionCooldown <= 0) {
+                    this.decideNewAction();
+                }
+                
+                if (this.targetX !== undefined) {
+                    const dx = this.targetX - this.x;
+                    const dy = this.targetY - this.y;
+                    const d = Math.hypot(dx, dy);
+                    
+                    if (d > 3) {
+                        this.vx = (this.vx * 0.7) + ((dx / d) * 2.8 * timeSpeed);
+                        this.vy = (this.vy * 0.7) + ((dy / d) * 2.8 * timeSpeed);
+                        this.x += this.vx;
+                        this.y += this.vy;
+                    } else {
+                        this.x = this.targetX;
+                        this.y = this.targetY;
+                        this.vx *= 0.6;
+                        this.vy *= 0.6;
+                    }
+                }
+                
+                if (this.currentAction === "trabajando") {
+                    this.productivity = Math.min(100, this.productivity + 0.85);
+                    this.energy = Math.max(18, this.energy - 0.6);
+                } else if (this.currentAction === "cafe") {
+                    this.energy = Math.min(100, this.energy + 2.8);
+                    this.happiness = Math.min(100, this.happiness + 0.9);
+                    if (Math.random() < 0.08) this.thought = "¡Qué rico el café!";
+                } else if (this.currentAction === "charlando") {
+                    this.happiness = Math.min(100, this.happiness + 1.6);
+                }
+                
+                this.x = Math.max(95, Math.min(this.x, 860));
+                this.y = Math.max(100, Math.min(this.y, 570));
+                
+                if (this.thoughtTimer > 0) this.thoughtTimer--;
+                else this.thought = "";
+            }
+            
+            decideNewAction() {
+                if (this.energy < 40) {
+                    this.currentAction = "cafe";
+                    this.targetX = COFFEE.x + (Math.random() - 0.5) * 35;
+                    this.targetY = COFFEE.y + (Math.random() - 0.5) * 35;
+                    this.thought = "Necesito café YA";
+                    this.thoughtTimer = 60;
+                    this.actionCooldown = 35;
+                    return;
+                }
+                
+                if (this.happiness < 45 && this.personality.extroversion > 58) {
+                    let nearest = null;
+                    let minD = Infinity;
+                    agents.forEach(o => {
+                        if (o !== this) {
+                            const d = Math.hypot(this.x - o.x, this.y - o.y);
+                            if (d < minD && d > 35) { minD = d; nearest = o; }
+                        }
+                    });
+                    if (nearest) {
+                        this.currentAction = "buscando_amigo";
+                        this.targetX = nearest.x + (Math.random() - 0.5) * 45;
+                        this.targetY = nearest.y + (Math.random() - 0.5) * 45;
+                        this.thought = "Voy a charlar un rato";
+                        this.thoughtTimer = 50;
+                        this.actionCooldown = 30;
+                        return;
+                    }
+                }
+                
+                const ambitionRoll = Math.random() < (this.personality.ambition / 110);
+                if (ambitionRoll) {
+                    this.currentAction = "trabajando";
+                    this.targetX = this.deskX;
+                    this.targetY = this.deskY;
+                    this.thought = this.personality.ambition > 80 ? "Hay que terminar esto" : "Trabajando...";
+                    this.thoughtTimer = 45;
+                } else {
+                    this.currentAction = "vagando";
+                    this.targetX = 140 + Math.random() * 620;
+                    this.targetY = 140 + Math.random() * 340;
+                    this.thought = Math.random() < 0.5 ? "Necesito estirar las piernas" : "";
+                    this.thoughtTimer = 40;
+                }
+                this.actionCooldown = 28;
+            }
+            
+            interact(other) {
+                let positive = Math.random() > 0.38;
+                let delta = positive ? (6 + Math.random() * 8) : (-5 + Math.random() * 4);
+                
+                this.happiness = Math.max(18, Math.min(100, this.happiness + delta));
+                other.happiness = Math.max(18, Math.min(100, other.happiness + (positive ? delta - 1.5 : delta + 2)));
+                
+                const topics = ["el nuevo sprint", "el café de la máquina", "el jefe", "el viernes", "ese bug raro"];
+                const topic = topics[Math.floor(Math.random() * topics.length)];
+                
+                const msg = positive 
+                    ? `${this.name} y ${other.name} charlaron de ${topic}. Buen ambiente.`
+                    : `${this.name} y ${other.name} tuvieron una pequeña discusión sobre ${topic}.`;
+                
+                addEvent(msg, false);
+                
+                this.actionCooldown = 32;
+                other.actionCooldown = 32;
+                this.currentAction = "charlando";
+                other.currentAction = "charlando";
+                
+                this.thought = positive ? "Qué bien charlar" : "Vaya tensión...";
+                this.thoughtTimer = 55;
+            }
         }
-      } else if (agent.personality.ambition > 75) {
-        agent.x = 120 + Math.random() * 200;
-        agent.y = 100 + Math.random() * 180;
-        agent.action = "trabajando";
-      } else {
-        agent.x = 150 + Math.random() * 500;
-        agent.y = 120 + Math.random() * 380;
-        agent.action = "vagando";
-      }
-    }
-
-    agent.x = Math.max(60, Math.min(agent.x, 640));
-    agent.y = Math.max(60, Math.min(agent.y, 520));
-  });
-
-  if (Math.random() < 0.09) {
-    const a1 = agents[Math.floor(Math.random() * agents.length)];
-    const a2 = agents.find(a => a.id !== a1.id);
-    if (a2 && Math.hypot(a1.x - a2.x, a1.y - a2.y) < 90) {
-      const happy = Math.random() > 0.45 ? 8 : -4;
-      a1.happiness = Math.max(20, Math.min(100, a1.happiness + happy));
-      a2.happiness = Math.max(20, Math.min(100, a2.happiness + happy - 1));
-      addLog(`${a1.name} y ${a2.name} charlaron`);
-    }
-  }
-
-  renderAgents();
-  renderAgentList();
-  updateGlobalStats();
-}
-
-function init() {
-  addLog("Bienvenido a Oficina GodMode v2");
-  addLog("Haz clic en un agente para intervenir como Dios");
-
-  renderAgents();
-  renderAgentList();
-  updateGlobalStats();
-
-  setInterval(() => {
-    if (!paused) simulateStep();
-  }, 420);
-
-  setInterval(() => {
-    if (!paused && Math.random() < 0.12) randomEvent();
-  }, 14000);
-
-  setTimeout(() => {
-    selectAgent(1);
-  }, 800);
-}
-
-window.onload = init;
-</script>
+        
+        function initAgents() {
+            agents = [
+                new Agent("Ana", "Desarrolladora Senior", 265, 285, "#6478f5", 285, 260, {extroversion: 42, ambition: 89, stress_resistance: 64}),
+                new Agent("Carlos", "Diseñador UX", 435, 310, "#f59e0b", 460, 290, {extroversion: 84, ambition: 67, stress_resistance: 51}),
+                new Agent("Laura", "Project Manager", 595, 250, "#f43f5e", 630, 230, {extroversion: 49, ambition: 93, stress_resistance: 41}),
+                new Agent("Pedro", "Interno", 325, 490, "#4ade80", 350, 468, {extroversion: 76, ambition: 48, stress_resistance: 71}),
+                new Agent("Sofía", "QA Lead", 695, 490, "#c026ff", 730, 468, {extroversion: 35, ambition: 74, stress_resistance: 79})
+            ];
+            
+            agents.forEach(a => {
+                a.targetX = a.deskX;
+                a.targetY = a.deskY;
+            });
+        }
+        
+        function addEvent(text, isGod = false) {
+            eventLog.unshift({text, isGod, ts: Date.now()});
+            if (eventLog.length > 11) eventLog.pop();
+            renderLog();
+        }
+        
+        function renderLog() {
+            const container = document.getElementById('event-log');
+            container.innerHTML = '';
+            
+            eventLog.forEach(entry => {
+                const div = document.createElement('div');
+                div.className = `log-entry ${entry.isGod ? 'god' : ''}`;
+                div.textContent = entry.text;
+                container.appendChild(div);
+            });
+            
+            container.scrollTop = 0;
+        }
+        
+        function updateUI() {
+            const avg = Math.round(agents.reduce((s, a) => s + a.productivity, 0) / agents.length);
+            document.getElementById('global-prod').textContent = avg;
+            document.getElementById('time-speed').textContent = `x${timeSpeed}`;
+            
+            const panel = document.getElementById('agent-panel');
+            const noSel = document.getElementById('no-selection');
+            
+            if (selectedAgent) {
+                panel.style.display = 'block';
+                noSel.style.display = 'none';
+                
+                document.getElementById('agent-name').innerHTML = selectedAgent.name;
+                document.getElementById('agent-role').innerHTML = selectedAgent.role;
+                
+                document.getElementById('energy-val').innerHTML = Math.round(selectedAgent.energy);
+                document.getElementById('happiness-val').innerHTML = Math.round(selectedAgent.happiness);
+                document.getElementById('prod-val').innerHTML = Math.round(selectedAgent.productivity);
+                
+                document.getElementById('energy-bar').style.width = `${selectedAgent.energy}%`;
+                document.getElementById('happiness-bar').style.width = `${selectedAgent.happiness}%`;
+                document.getElementById('prod-bar').style.width = `${selectedAgent.productivity}%`;
+            } else {
+                panel.style.display = 'none';
+                noSel.style.display = 'block';
+            }
+        }
+        
+        function godAction(type) {
+            if (!selectedAgent) return;
+            const a = selectedAgent;
+            
+            if (type === 'energy') {
+                a.energy = Math.min(100, a.energy + 27);
+                a.thought = "¡Gracias Dios!";
+                a.thoughtTimer = 50;
+                addEvent(`✨ DIOS dio energía a ${a.name}`, true);
+            } 
+            else if (type === 'happiness') {
+                a.happiness = Math.min(100, a.happiness + 22);
+                a.thought = "Me siento mejor";
+                a.thoughtTimer = 45;
+                addEvent(`✨ DIOS motivó a ${a.name}`, true);
+            } 
+            else if (type === 'deadline') {
+                a.productivity = Math.min(100, a.productivity + 17);
+                a.energy = Math.max(15, a.energy - 15);
+                a.happiness = Math.max(15, a.happiness - 10);
+                a.thought = "¡Presión!";
+                a.thoughtTimer = 40;
+                addEvent(`⚡ DIOS impuso deadline a ${a.name}`, true);
+            } 
+            else if (type === 'chaos') {
+                a.energy = Math.max(15, a.energy - 30);
+                a.happiness = Math.max(15, a.happiness - 25);
+                a.thought = "¡¿Qué ha pasado?!";
+                a.thoughtTimer = 55;
+                addEvent(`🔥 DIOS provocó caos en ${a.name}`, true);
+            } 
+            else if (type === 'meeting') {
+                const others = agents.filter(x => x !== a);
+                if (others.length) {
+                    const p = others[Math.floor(Math.random() * others.length)];
+                    a.interact(p);
+                    addEvent(`👥 DIOS forzó reunión entre ${a.name} y ${p.name}`, true);
+                }
+            }
+            
+            updateUI();
+        }
+        
+        function togglePause() {
+            paused = !paused;
+            const btn = document.getElementById('pause-btn');
+            btn.textContent = paused ? '▶ Reanudar' : '⏸ Pausa';
+            if (!paused) addEvent("▶ Simulación reanudada", true);
+        }
+        
+        function changeSpeed() {
+            timeSpeed = timeSpeed === 1 ? 3 : 1;
+            document.getElementById('time-speed').textContent = `x${timeSpeed}`;
+            addEvent(`⚡ Velocidad del tiempo: x${timeSpeed}`, true);
+        }
+        
+        function resetSimulation() {
+            initAgents();
+            eventLog = [];
+            selectedAgent = null;
+            addEvent("🔄 Simulación reiniciada por Dios", true);
+            updateUI();
+            renderLog();
+        }
+        
+        function checkProximityInteractions() {
+            for (let i = 0; i < agents.length; i++) {
+                for (let j = i+1; j < agents.length; j++) {
+                    const a = agents[i];
+                    const b = agents[j];
+                    const d = Math.hypot(a.x - b.x, a.y - b.y);
+                    
+                    if (d > 30 && d < 58 && 
+                        frame - a.lastInteract > 75 && 
+                        frame - b.lastInteract > 75) {
+                        
+                        if (Math.random() < 0.29) {
+                            a.interact(b);
+                            a.lastInteract = frame;
+                            b.lastInteract = frame;
+                        }
+                    }
+                }
+            }
+        }
+        
+        function drawOffice() {
+            ctx.fillStyle = '#1e2937';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(80, 95, 480, 365);
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(80, 95, 480, 365);
+            
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 11px Inter';
+            ctx.fillText("ÁREA DE TRABAJO", 210, 112);
+            
+            ctx.fillStyle = '#3f2a1f';
+            ctx.fillRect(575, 95, 305, 275);
+            ctx.strokeStyle = '#f59e0b';
+            ctx.strokeRect(575, 95, 305, 275);
+            ctx.fillStyle = '#fcd34d';
+            ctx.fillText("ZONA DE DESCANSO", 625, 112);
+            
+            ctx.fillStyle = '#2f2a4a';
+            ctx.fillRect(575, 385, 305, 195);
+            ctx.strokeStyle = '#a78bfa';
+            ctx.strokeRect(575, 385, 305, 195);
+            ctx.fillStyle = '#c4b5fd';
+            ctx.fillText("SALA DE REUNIONES", 625, 402);
+            
+            ctx.fillStyle = '#27253a';
+            ctx.fillRect(835, 75, 75, 115);
+            ctx.strokeStyle = '#64748b';
+            ctx.strokeRect(835, 75, 75, 115);
+            ctx.fillStyle = '#94a3b8';
+            ctx.fillText("OFICINA JEFE", 845, 92);
+            
+            ctx.fillStyle = '#78350f';
+            ctx.beginPath();
+            ctx.arc(COFFEE.x, COFFEE.y, 19, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fffbeb';
+            ctx.font = 'bold 15px Inter';
+            ctx.fillText("☕", COFFEE.x - 8, COFFEE.y + 6);
+            
+            ctx.fillStyle = '#78350f';
+            ctx.fillRect(MEETING.x - 58, MEETING.y - 26, 116, 52);
+            ctx.fillStyle = '#451a03';
+            ctx.fillText("🪑🪑", MEETING.x - 28, MEETING.y + 4);
+            
+            agents.forEach(a => {
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(a.deskX - 26, a.deskY - 15, 52, 30);
+                ctx.strokeStyle = '#64748b';
+                ctx.strokeRect(a.deskX - 26, a.deskY - 15, 52, 30);
+                ctx.fillStyle = '#e0e7ff';
+                ctx.fillText("💻", a.deskX - 9, a.deskY + 3);
+            });
+        }
+        
+        function drawAgent(a) {
+            const isSelected = a === selectedAgent;
+            
+            ctx.fillStyle = 'rgba(15,23,42,0.4)';
+            ctx.beginPath();
+            ctx.ellipse(a.x + 5, a.y + 8, 15, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = a.color;
+            ctx.beginPath();
+            ctx.arc(a.x, a.y, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#fed7aa';
+            ctx.beginPath();
+            ctx.arc(a.x, a.y - 4, 8.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#1e2937';
+            ctx.beginPath();
+            ctx.arc(a.x - 3.5, a.y - 5, 1.8, 0, Math.PI * 2);
+            ctx.arc(a.x + 3.5, a.y - 5, 1.8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#f1e7ff';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(a.name, a.x, a.y - 26);
+            
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '9.5px Inter';
+            ctx.fillText(a.role.split(' ')[0], a.x, a.y - 38);
+            
+            ctx.fillStyle = '#64748b';
+            ctx.font = '8.5px Inter';
+            ctx.fillText(a.currentAction, a.x, a.y + 30);
+            
+            if (a.thought && a.thoughtTimer > 0) {
+                ctx.fillStyle = 'rgba(30,41,59,0.95)';
+                ctx.strokeStyle = '#64748b';
+                ctx.lineWidth = 1.5;
+                const bubbleX = a.x + 22;
+                const bubbleY = a.y - 42;
+                const w = Math.max(68, a.thought.length * 5.2);
+                
+                ctx.beginPath();
+                ctx.roundRect(bubbleX, bubbleY, w, 18, 9);
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.fillStyle = '#e0e7ff';
+                ctx.font = '8.5px Inter';
+                ctx.fillText(a.thought, bubbleX + 6, bubbleY + 12);
+                
+                ctx.beginPath();
+                ctx.moveTo(bubbleX + 8, bubbleY + 18);
+                ctx.lineTo(a.x + 5, a.y - 12);
+                ctx.lineTo(bubbleX + 14, bubbleY + 18);
+                ctx.fill();
+            }
+            
+            const barY = a.y + 18;
+            ctx.fillStyle = '#1e2937';
+            ctx.fillRect(a.x - 14, barY, 28, 4);
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(a.x - 14, barY, 28 * (a.energy / 100), 4);
+            
+            ctx.fillStyle = '#1e2937';
+            ctx.fillRect(a.x - 14, barY + 6, 28, 4);
+            ctx.fillStyle = '#eab308';
+            ctx.fillRect(a.x - 14, barY + 6, 28 * (a.happiness / 100), 4);
+            
+            if (isSelected) {
+                ctx.strokeStyle = '#a855f7';
+                ctx.lineWidth = 3.5;
+                ctx.beginPath();
+                ctx.arc(a.x, a.y, 21, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.lineWidth = 2;
+            }
+        }
+        
+        function gameLoop() {
+            if (!paused) {
+                frame++;
+                
+                agents.forEach(a => a.update());
+                
+                if (frame % 4 === 0) {
+                    checkProximityInteractions();
+                }
+                
+                if (Math.random() < 0.0038) {
+                    const type = ['coffee','boss','news','server'][Math.floor(Math.random()*4)];
+                    if (type === 'coffee') {
+                        agents.forEach(a => a.energy = Math.min(100, a.energy + 10));
+                        addEvent("☕ Pausa café divina para todos");
+                    } else if (type === 'boss') {
+                        const v = agents[Math.floor(Math.random()*agents.length)];
+                        v.happiness = Math.max(15, v.happiness - 16);
+                        v.energy = Math.max(15, v.energy - 8);
+                        addEvent(`😡 El jefe regañó a ${v.name}`);
+                    } else if (type === 'news') {
+                        agents.forEach(a => a.happiness = Math.min(100, a.happiness + 8));
+                        addEvent("🎉 ¡Buenas noticias del cliente!");
+                    } else {
+                        const vs = agents.sort(() => 0.5 - Math.random()).slice(0,3);
+                        vs.forEach(v => v.productivity = Math.max(20, v.productivity - 10));
+                        addEvent("💥 ¡Servidor caído! Caos general");
+                    }
+                }
+                
+                if (frame % 15 === 0) updateUI();
+            }
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawOffice();
+            agents.forEach(a => drawAgent(a));
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function handleCanvasClick(e) {
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const my = e.clientY - rect.top;
+            
+            let found = null;
+            agents.forEach(a => {
+                if (Math.hypot(a.x - mx, a.y - my) < 19) found = a;
+            });
+            
+            if (found) {
+                selectedAgent = found;
+                addEvent(`Seleccionaste a ${found.name}`, true);
+            } else {
+                selectedAgent = null;
+            }
+            
+            updateUI();
+        }
+        
+        function closeModal() {
+            document.getElementById('welcome-modal').style.display = 'none';
+        }
+        
+        function init() {
+            initAgents();
+            
+            addEvent("¡Bienvenido a Oficina GodMode v1.2!");
+            addEvent("Los agentes viven solos. Tú solo observas... o intervienes.");
+            
+            canvas.addEventListener('click', handleCanvasClick);
+            
+            document.addEventListener('keydown', e => {
+                if (e.key === ' ') { e.preventDefault(); togglePause(); }
+                if (e.key.toLowerCase() === 'r' && selectedAgent) godAction('energy');
+                if (e.key.toLowerCase() === 'escape') selectedAgent = null;
+            });
+            
+            updateUI();
+            gameLoop();
+            
+            setTimeout(() => {
+                document.getElementById('welcome-modal').style.display = 'flex';
+            }, 600);
+            
+            setTimeout(() => {
+                if (eventLog.length < 6) {
+                    addEvent("💡 Tip: Los extrovertidos buscan compañía solos");
+                }
+            }, 14000);
+        }
+        
+        window.onload = init;
+    </script>
 </body>
 </html>
